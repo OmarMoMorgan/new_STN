@@ -5,7 +5,7 @@ tf.disable_v2_behavior()
 import numpy as np
 import time
 import copy
-import DataProvider
+from . import DataProvider
 import sys
 
 
