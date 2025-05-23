@@ -2,7 +2,9 @@ import toolbox.NetFlow as nf
 from toolbox import DataProvider
 from toolbox import LayerExtension
 from toolbox import ConvRNNCell
-import tensorflow as tf
+#import tensorflow as tf
+import tensorflow.compat.v1 as tf
+tf.disable_v2_behavior()
 import tensorlayer as tl
 import numpy as np
 import argparse
