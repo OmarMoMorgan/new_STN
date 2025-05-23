@@ -194,7 +194,7 @@ tl.files.assign_params(sess, params_ots, network_ots)
 tl.layers.initialize_global_variables(sess)
 
 
-print 'set done'
+print('set done')
 
 
 test_kwag = {

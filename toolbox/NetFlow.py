@@ -268,7 +268,7 @@ def Ouroborosfit(sess, network, cost, dataset, train_op, batchsize, input_size, 
 
     for epoch in range(n_epoch):
         start_time = time.time()
-        for frame in xrange(dataset.shape[-1]-input_size[-1]):
+        for frame in range(dataset.shape[-1]-input_size[-1]):
             output_provider = DataProvider.Provider(stride=(1, 1), input_size=input_size,
                                                     output_size=(1, 1, 1), prediction_gap=0, batchsize=-1, pad=pad,
                                                     pad_value=0, shuffle=False)
@@ -297,10 +297,10 @@ def Ouroborosfit(sess, network, cost, dataset, train_op, batchsize, input_size, 
                 'targets': (ground_truth-mean)/std
             }
 
-            print 'prediction:', np.mean(np.mean(input_source, axis=0), axis=0)[-1], 'GT:', dataset[:, :, input_size[-1] + frame-1].mean()
+            print('prediction:', np.mean(np.mean(input_source, axis=0), axis=0)[-1], 'GT:', dataset[:, :, input_size[-1] + frame-1].mean())
 
             if print_frame_loss:
-                print ("Epoch %d, frame %d of %d" % (epoch + 1, frame, dataset.shape[-1]-input_size[-1])),
+                print("Epoch %d, frame %d of %d" % (epoch + 1, frame, dataset.shape[-1]-input_size[-1])),
             easyfit(sess=sess, network=network, cost=cost, train_op=train_op, tra_provider=tra_provider, x=x,
                     y_=y_, n_epoch=1, tra_kwag=tra_kwag, print_loss=print_frame_loss)
 
@@ -314,7 +314,7 @@ def Ouroborosfit(sess, network, cost, dataset, train_op, batchsize, input_size, 
             else:
                 modelsaver(network=network, path=save_path, epoch_identifier=None)
 
-        print 'Epoch took:', time.time()-start_time, 's'
+        print('Epoch took:', time.time()-start_time, 's')
 
     if save_model == -1:
         modelsaver(network=network, path=save_path, epoch_identifier=None)
@@ -358,7 +358,7 @@ def custompredict(sess, network, output_provider, x, fragment_size=1000, output_
         fra_num = X_out_a.shape[0] / fragment_size
         offset = X_out_a.shape[0] % fragment_size
         final_output = np.zeros((X_out_a.shape[0], output_length))
-        for fragment in xrange(fra_num):
+        for fragment in range(fra_num):
             x_fra = X_out_a[fragment * fragment_size:(fragment + 1) * fragment_size]
             feed_dict = {x: x_fra, }
             feed_dict.update(dp_dict)
@@ -423,11 +423,11 @@ def out_futurepredictor(sess, network, network2, output_provider, x, timestamp, 
         whole_prediction = np.zeros((truth_prediction.size + future*framesize, 1))
         whole_prediction[0:truth_prediction.size] = truth_prediction
         input_size = (frameshape[0], frameshape[1], output_provider.input_size[2])
-        print 'current done.'
-        for frame in xrange(future):
+        print('current done.')
+        for frame in range(future):
 
             decay = 1 - sigmoid(w * frame + bias)
-            print 'predicting the future:', frame, 'decay:', decay
+            print('predicting the future:', frame, 'decay:', decay)
 
             if frame == 0:
                 whole_prediction[truth_prediction.size - framesize:truth_prediction.size] = \
@@ -451,7 +451,7 @@ def out_futurepredictor(sess, network, network2, output_provider, x, timestamp, 
                     -1, frameshape[0], frameshape[1]), (1, 2, 0))
 
             future_input = np.clip(future_input, 0, np.inf)
-            print np.mean(np.mean(future_input, axis=0), axis=0)
+            print(np.mean(np.mean(future_input, axis=0), axis=0))
 
 
             future_kwag = copy.deepcopy(out_kwag)
@@ -471,7 +471,7 @@ def out_futurepredictor(sess, network, network2, output_provider, x, timestamp, 
                 whole_prediction[truth_prediction.size + frame * framesize:truth_prediction.size + (frame + 1) *
                     framesize] = decay*(future_prediction*weight + future_prediction2*(1-weight)) + \
                                  (1-decay)*season[:, :, (timestamp+frame) % period].reshape(framesize, 1)
-                print 'Difference (origin-ouroboros):', (future_prediction - future_prediction2).mean() * 1000
+                print('Difference (origin-ouroboros):', (future_prediction - future_prediction2).mean() * 1000)
 
             else:
                 whole_prediction[truth_prediction.size + frame * framesize:truth_prediction.size +
@@ -521,9 +521,9 @@ def futurepredictor(sess, network, network2, output_provider, x, mean=0, std=1, 
         whole_prediction = np.zeros((truth_prediction.size + future*framesize, 1))
         whole_prediction[0:truth_prediction.size] = truth_prediction
         input_size = (frameshape[0], frameshape[1], output_provider.input_size[2])
-        print 'current done.'
-        for frame in xrange(future):
-            print 'predicting the future:', frame
+        print('current done.')
+        for frame in range(future):
+            print('predicting the future:', frame)
             future_input = np.zeros(input_size)
             if frame < (output_provider.input_size[2]-1):
                 future_input[:, :, 0:output_provider.input_size[2]-frame-1]=\
@@ -541,7 +541,7 @@ def futurepredictor(sess, network, network2, output_provider, x, mean=0, std=1, 
                     -1, frameshape[0], frameshape[1]), (1, 2, 0))#*(1+np.exp(-(frame+1)*input_decay)+bias)
 
             # future_input = np.clip(future_input, 0, 8100)
-            print np.mean(np.mean(future_input, axis=0), axis=0)
+            print(np.mean(np.mean(future_input, axis=0), axis=0))
 
             future_kwag = copy.deepcopy(out_kwag)
             future_kwag['inputs'] = future_input
@@ -560,7 +560,7 @@ def futurepredictor(sess, network, network2, output_provider, x, mean=0, std=1, 
                 whole_prediction[truth_prediction.size + frame * framesize:truth_prediction.size +
                                                                            (frame + 1) * framesize] = \
                     (future_prediction*weight + future_prediction2*(1-weight))
-                print 'Difference (origin-ouroboros):', (future_prediction - future_prediction2).mean() * 1000
+                print('Difference (origin-ouroboros):', (future_prediction - future_prediction2).mean() * 1000)
 
             else:
                 whole_prediction[truth_prediction.size + frame * framesize:truth_prediction.size +

@@ -1,6 +1,7 @@
 import toolbox.NetFlow as nf
 from toolbox import DataProvider
 from toolbox import LayerExtension
+from toolbox import ConvRNNCell
 import tensorflow as tf
 import tensorlayer as tl
 import numpy as np
@@ -215,7 +216,7 @@ if args.pre_model_path is not None:
     load_params = tl.files.load_npz(path=args.pre_model_path, name=args.pre_model_name)
     tl.files.assign_params(sess, load_params, network)
 
-print 'set done'
+print('set done')
 
 nf.customfit(sess=sess, network=network, cost=cost, train_op=train_op, tra_provider=tra_provider, x=x, y_=y_, acc=None,
              n_epoch=args.epoch, print_freq=1, val_provider=val_provider, save_model=1, tra_kwag=tra_kwag, val_kwag=val_kwag,

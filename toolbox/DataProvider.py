@@ -70,12 +70,12 @@ f
         if external:
             external_data = np.zeros((total, 1))
 
-        x_offset = (self.input_size[0] - self.output_size[0]) / 2
-        y_offset = (self.input_size[1] - self.output_size[1]) / 2
+        x_offset = (self.input_size[0] - self.output_size[0]) // 2
+        y_offset = (self.input_size[1] - self.output_size[1]) // 2
 
         data_num = 0
 
-        for frame in xrange(len(excerpt)):
+        for frame in range(len(excerpt)):
 
             if external:
                 external_frame = inputs[:, :, excerpt[frame] + self.input_size[2] + self.prediction_gap]
@@ -101,8 +101,8 @@ f
 
                 target_frame = target_frame.reshape(x_max, y_max, self.output_size[2])
 
-            for x in xrange(self.input_size[0], x_max + 1, self.stride[0]):
-                for y in xrange(self.input_size[1], y_max + 1, self.stride[1]):
+            for x in range(self.input_size[0], x_max + 1, self.stride[0]):
+                for y in range(self.input_size[1], y_max + 1, self.stride[1]):
                     input_data[:, :, :, data_num] = input_frame[x - self.input_size[0]:x, y - self.input_size[1]:y, :]
                     target_data[:, :, :, data_num] = target_frame[
                                                      x - self.input_size[0] + x_offset:x - self.input_size[0] +
